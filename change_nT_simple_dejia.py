@@ -1,6 +1,14 @@
 #simple model 
 #minangle=75
 
+
+# ----------------------------------------------------------------------------
+# Set parameters
+# ----------------------------------------------------------------------------
+
+dpi=3000 #If you want the jpg form of figure
+increament=0.0035 # The interval of angle
+
 # ----------------------------------------------------------------------------
 # import module
 # ----------------------------------------------------------------------------
@@ -9,37 +17,36 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.tri import TriAnalyzer, Triangulation, UniformTriRefiner
-from function_code import function as f
-from function_code import function_simple as f1
 import math
-from function_code.Generate_Excel import get_point 
-from function_code.Generate_Excel import Add_boundary
 import matplotlib
 from matplotlib.font_manager import FontProperties
 
-dpi=3000
+# ----------------------------------------------------------------------------
+# import custom module (in Subfunction branch)
+# ----------------------------------------------------------------------------
+
+import function as f
+import function_simple as f1
+import get_point 
+import Add_boundary
+
 # ----------------------------------------------------------------------------
 # import font 
 # ----------------------------------------------------------------------------
 
-font_path='/content/drive/MyDrive/software_TiO2/font/times.ttf'
-matplotlib.font_manager.fontManager.addfont(font_path)
-
-font_path='/content/drive/MyDrive/software_TiO2/font/calibri.ttf'
-matplotlib.font_manager.fontManager.addfont(font_path)
-
-font_path='/content/drive/MyDrive/software_TiO2/font/calibrii.ttf'
-matplotlib.font_manager.fontManager.addfont(font_path)
-
-font_properties = FontProperties(fname="/content/drive/MyDrive/software_TiO2/font/calibri.ttf", size=10)
-
-
-
+#An example, if you want to get the figure's font you want. 
+#font_path='/content/drive/MyDrive/software_TiO2/font/times.ttf'
+#matplotlib.font_manager.fontManager.addfont(font_path)
+#font_properties = FontProperties(fname="/content/drive/MyDrive/software_TiO2/font/calibri.ttf", size=10)
 
 # ----------------------------------------------------------------------------
 # Set file address
 # ----------------------------------------------------------------------------
 
+#The simulated experimental data you want. (In xlsx)
+experimental_file='/content/drive/MyDrive/software_TiO2/Excel/Exper/nT/nTchange_simple.xlsx'
+
+#Just the path of file is OK.
 #First
 workbook_file1='/content/drive/MyDrive/software_TiO2/Excel/Patchiness_Za/pza_RSM_169boundaru1.xlsx'
 #Second
@@ -48,12 +55,10 @@ workbook_file2='/content/drive/MyDrive/software_TiO2/Excel/Patchiness_Za/pza_RSM
 workbook_file_delaunay1='/content/drive/MyDrive/software_TiO2/Excel/result_RSM_169boundary_ttt.xlsx'
 #Second
 workbook_file_delaunay2='/content/drive/MyDrive/software_TiO2/Excel/result_RSM_169boundary_tttt.xlsx'
-experimental_file='/content/drive/MyDrive/software_TiO2/Excel/Exper/nT/nTchange_simple.xlsx'
-
 
 
 # ----------------------------------------------------------------------------
-# Get a new Excel(number: two)
+# Get two new Excel
 # ----------------------------------------------------------------------------
 
 def create_excel_xls(path):
@@ -77,7 +82,6 @@ init_mask_frac_1 = 0
 min_circle_ratio_1 = 0.04
 
 
-
 # ----------------------------------------------------------------------------
 # Delaunay parameters(Second)
 # ----------------------------------------------------------------------------
@@ -85,7 +89,6 @@ min_circle_ratio_1 = 0.04
 subdiv_2 =0
 init_mask_frac_2 = 0
 min_circle_ratio_2 = 0.04
-
 
 
 # ----------------------------------------------------------------------------
@@ -101,8 +104,6 @@ interval2_y1=0.000000200
 n_x1= 15
 m_y1= 40
 
-
-
 # ----------------------------------------------------------------------------
 # Set getting points' parameter(Second)
 # ----------------------------------------------------------------------------
@@ -115,8 +116,6 @@ interval2_y2=0.000000200
 
 n_x2= 15
 m_y2= 15
-
-
 
 # ----------------------------------------------------------------------------
 # Generate points (First)
@@ -147,7 +146,6 @@ df=pd.DataFrame({'patchiness':point1 , 'za':point2})
 
 df.to_excel(writer1)
 writer1.close()
-
 
 # ----------------------------------------------------------------------------
 # Generate points (Second)
@@ -213,7 +211,7 @@ for i in range(number):
 
 df1=pd.read_excel(workbook_file1) 
 df2=pd.read_excel(workbook_file2) 
-increament=0.0035
+
 
 
 
