@@ -1,11 +1,13 @@
 import math
 def chageincident_energy_simple(incident_energy, n):
+    
     incident_energy = incident_energy / n
     return incident_energy
 
 def calculate_reflection_number_simple(n,angle, length, diameter):
+    
     N=[]
-    x=len(angle[0]) #确定循环的间断点
+    x=len(angle[0]) 
 
     for i in range(x):
         N.append(int(length/(diameter * math.tan(angle[0][i])))+1)
@@ -14,15 +16,19 @@ def calculate_reflection_number_simple(n,angle, length, diameter):
     return N
 
 def calculate_radio_13_mode123_simple(m,n, incident_energy , disspated_energy):
+    
     disspated_radio=[]
+    
     for i in range(m):
         x=disspated_energy[i] / (incident_energy * n )
         disspated_radio.append(x)
     return disspated_radio
 
 def sum_disspated_energy_123_simple(energy_edisspated, energy_rdisspated, m,energy_nontir):
+    
     disspated_energy=[]
-    for i in range(m): #做p和za的大循环
+    
+    for i in range(m): 
         sum1=energy_edisspated[i] + energy_rdisspated[i] + energy_nontir[i]
         disspated_energy.append(sum1)
     return disspated_energy
