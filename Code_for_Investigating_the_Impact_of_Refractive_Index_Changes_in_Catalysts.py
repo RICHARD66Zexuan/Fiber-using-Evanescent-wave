@@ -23,10 +23,10 @@ import math
 # import custom module (in Subfunction branch)
 # ----------------------------------------------------------------------------
 
-import function as f
-import function_simple as f1
-import get_point 
-import Add_boundary
+import Function_for_Creating_Dataform_Delaunay_Need as f
+import Function_for_Model as f1
+import Function_for_Creating_RSM_lattice as get_point 
+import Function_for_Add_boundary as Add_boundary
 
 #The results are divided into two distinct regions based on the parameter p: 
 #the first region spans from 0.0001 to 0.15, 
