@@ -1,4 +1,7 @@
 import numpy as np
+
+#Fill the boundary of the mesh created by Response surface methodology
+
 def boundary_point(A_initial,A_final,B_initial,B_final,A_interval,B_interval):
   point1=np.arange(A_initial,A_final,A_interval).tolist()
   point2=np.arange(B_initial,B_final,B_interval).tolist()
