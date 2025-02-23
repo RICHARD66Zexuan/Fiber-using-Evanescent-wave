@@ -525,13 +525,3 @@ for i in range(number):
 
     plt.savefig(f'{i+1}.svg',format='svg')
 
-
-
-# ----------------------------------------------------------------------------
-# import font 
-# ----------------------------------------------------------------------------
-
-#An example, if you want to get the figure's font you want. 
-#font_path='/content/drive/MyDrive/software_TiO2/font/times.ttf'
-#matplotlib.font_manager.fontManager.addfont(font_path)
-#font_properties = FontProperties(fname="/content/drive/MyDrive/software_TiO2/font/calibri.ttf", size=10)
