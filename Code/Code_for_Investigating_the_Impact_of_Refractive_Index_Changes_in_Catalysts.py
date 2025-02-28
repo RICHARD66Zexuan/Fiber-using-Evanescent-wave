@@ -1,11 +1,9 @@
 #Minimum Angle of Incidence = 75 degree
 
-# ----------------------------------------------------------------------------
-# Set parameters
-# ----------------------------------------------------------------------------
-
-increament=0.0035 # The interval of angle in Model
-experimental_file=''
+#The results are divided into two distinct regions based on the parameter p: 
+#the first region spans from 0.0001 to 0.15, 
+#while the second region extends from 0.15 to 1.00. 
+#And in both regions, the characteristic length scale Za ranges from 1 nm to 200 nm 
 
 # ----------------------------------------------------------------------------
 # import module
@@ -29,11 +27,13 @@ import Function_for_Model as f1
 import Function_for_Creating_RSM_lattice as get_point 
 import Function_for_Add_boundary as Add_boundary
 
-#The results are divided into two distinct regions based on the parameter p: 
-#the first region spans from 0.0001 to 0.15, 
-#while the second region extends from 0.15 to 1.00. 
-#And in both regions, the characteristic length scale Za ranges from 1 nm to 200 nm 
+# ----------------------------------------------------------------------------
+# Set parameters
+# ----------------------------------------------------------------------------
 
+increament=0.0035 # The interval of angle in Model
+experimental_file=''
+font_properties=FontProperties(fname="", size=10)
 # ----------------------------------------------------------------------------
 # Set getting points' parameter(First)
 # ----------------------------------------------------------------------------
