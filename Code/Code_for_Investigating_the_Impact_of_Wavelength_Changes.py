@@ -1,57 +1,91 @@
-#simple model 
-#minangle=75
+#Minimum Angle of Incidence = 75 degree
+
+#The results are divided into two distinct regions based on the parameter p: 
+#the first region spans from 0.0001 to 0.15, 
+#while the second region extends from 0.15 to 1.00. 
+#And in both regions, the characteristic length scale Za ranges from 1 nm to 200 nm 
 
 # ----------------------------------------------------------------------------
 # import module
 # ----------------------------------------------------------------------------
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from matplotlib.tri import TriAnalyzer, Triangulation, UniformTriRefiner
-from function_code import function as f
-from function_code import function_simple as f1
-import math
-from function_code.Generate_Excel import get_point 
-from function_code.Generate_Excel import Add_boundary
 import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.tri import TriAnalyzer, Triangulation, UniformTriRefiner
 from matplotlib.font_manager import FontProperties
 
-dpi=3000
-# ----------------------------------------------------------------------------
-# import font :Time New Raman
-# ----------------------------------------------------------------------------
-
-font_path='/content/drive/MyDrive/software_TiO2/font/times.ttf'
-matplotlib.font_manager.fontManager.addfont(font_path)
-
-font_path='/content/drive/MyDrive/software_TiO2/font/calibri.ttf'
-matplotlib.font_manager.fontManager.addfont(font_path)
-
-font_path='/content/drive/MyDrive/software_TiO2/font/calibrii.ttf'
-matplotlib.font_manager.fontManager.addfont(font_path)
-
-font_properties = FontProperties(fname="/content/drive/MyDrive/software_TiO2/font/calibri.ttf", size=10)
-
+import numpy as np
+import pandas as pd
+import math
 
 # ----------------------------------------------------------------------------
-# Set file address
+# import custom module (in Subfunction branch)
 # ----------------------------------------------------------------------------
 
-#First
-workbook_file1='/content/drive/MyDrive/software_TiO2/Excel/Patchiness_Za/pza_RSM_169boundaru1.xlsx'
-#Second
-workbook_file2='/content/drive/MyDrive/software_TiO2/Excel/Patchiness_Za/pza_RSM_169boundaru2.xlsx'
-#First
-workbook_file_delaunay1='/content/drive/MyDrive/software_TiO2/Excel/result_RSM_169boundary_ttt.xlsx'
-#Second
-workbook_file_delaunay2='/content/drive/MyDrive/software_TiO2/Excel/result_RSM_169boundary_tttt.xlsx'
-experimental_file='/content/drive/MyDrive/software_TiO2/Excel/Exper/wavelength_TiO2/Wavelength_TiO2_water_fiber.xlsx'
-
-
+import Function_for_Creating_Dataform_Delaunay_Need as f
+import Function_for_Model as f1
+import Function_for_Creating_RSM_lattice as get_point 
+import Function_for_Add_boundary as Add_boundary
 
 # ----------------------------------------------------------------------------
-# Get a new Excel(number: two)
+# Set parameters
+# ----------------------------------------------------------------------------
+
+increament=0.0035 # The interval of angle in Model
+experimental_file=''
+font_properties=FontProperties(fname="", size=10)
+
+# ----------------------------------------------------------------------------
+# Set getting points' parameter(First)
+# ----------------------------------------------------------------------------
+
+#The first Region
+p_x1 =0.0001
+za_y1 =0.000000001
+
+interval1_x1=0.16
+interval2_y1=0.000000200
+
+#Set Mesh Space
+n_x1= 15
+m_y1= 40
+
+# First Delaunay parameters
+subdiv_1 =0
+init_mask_frac_1 = 0
+min_circle_ratio_1 = 0.04
+
+#First data transition file address
+workbook_file1=''
+workbook_file_delaunay1=''
+
+# ----------------------------------------------------------------------------
+# Set getting points' parameter(Second)
+# ----------------------------------------------------------------------------
+
+#The Second Region
+p_x2 =0.15
+za_y2 =0.000000001
+
+
+interval1_x2=0.85
+interval2_y2=0.000000200
+
+#Set Mesh Space
+n_x2= 15
+m_y2= 15
+
+#Second Delaunay parameters
+subdiv_2 =0
+init_mask_frac_2 = 0
+min_circle_ratio_2 = 0.04
+
+#Second data transition file address
+workbook_file2=''
+workbook_file_delaunay2=''
+
+# ----------------------------------------------------------------------------
+# Create two new Excel files to store the simulation data.
 # ----------------------------------------------------------------------------
 
 def create_excel_xls(path):
@@ -65,56 +99,6 @@ writer1=pd.ExcelWriter(workbook_file1)
 
 create_excel_xls(workbook_file2)
 writer2=pd.ExcelWriter(workbook_file2)
-
-# ----------------------------------------------------------------------------
-# Delaunay parameters(First)
-# ----------------------------------------------------------------------------
-
-subdiv_1 =0
-init_mask_frac_1 = 0
-min_circle_ratio_1 = 0.04
-
-
-
-# ----------------------------------------------------------------------------
-# Delaunay parameters(Second)
-# ----------------------------------------------------------------------------
-
-subdiv_2 =0
-init_mask_frac_2 = 0
-min_circle_ratio_2 = 0.04
-
-
-
-# ----------------------------------------------------------------------------
-# Set getting points' parameter(First)
-# ----------------------------------------------------------------------------
-
-p_x1 =0.0001
-za_y1 =0.000000001
-
-interval1_x1=0.16
-interval2_y1=0.000000200
-
-n_x1= 15
-m_y1= 40
-
-
-
-# ----------------------------------------------------------------------------
-# Set getting points' parameter(Second)
-# ----------------------------------------------------------------------------
-
-p_x2 =0.15
-za_y2 =0.000000001
-
-interval1_x2=0.85
-interval2_y2=0.000000200
-
-n_x2= 15
-m_y2= 15
-
-
 
 # ----------------------------------------------------------------------------
 # Generate points (First)
@@ -146,7 +130,6 @@ df=pd.DataFrame({'patchiness':point1 , 'za':point2})
 df.to_excel(writer1)
 writer1.close()
 
-
 # ----------------------------------------------------------------------------
 # Generate points (Second)
 # ----------------------------------------------------------------------------
@@ -176,8 +159,6 @@ df=pd.DataFrame({'patchiness':point1 , 'za':point2})
 
 df.to_excel(writer2)
 writer2.close()
-
-
 
 # ----------------------------------------------------------------------------
 # Get Result Excel for Delaunay (prepare parameters)
@@ -211,9 +192,6 @@ for i in range(number):
 
 df1=pd.read_excel(workbook_file1) 
 df2=pd.read_excel(workbook_file2) 
-increament=0.0035
-
-
 
 # ----------------------------------------------------------------------------
 # Get Result Excel for Delaunay (First)
@@ -224,10 +202,10 @@ za=[]
 create_excel_xls(workbook_file_delaunay1)
 writer=pd.ExcelWriter(workbook_file_delaunay1)
 m=len(df1.values)
-for i in range(m): #读取数据
+for i in range(m): 
     p.append(df1.values[i,1])
     za.append(df1.values[i,2])
-for i in [0]:  #主函数
+for i in [0]:  
     minangle=1.30899693
     maxangle=1.569
     fiber_critical_angle=f.get_fiber_critical_angle(fiber_index[i], medium_refraction_index[i])
@@ -265,10 +243,10 @@ za=[]
 create_excel_xls(workbook_file_delaunay2)
 writer=pd.ExcelWriter(workbook_file_delaunay2)
 m=len(df2.values)
-for i in range(m): #读取数据
+for i in range(m): 
     p.append(df2.values[i,1])
     za.append(df2.values[i,2])
-for i in [0]:  #主函数
+for i in [0]:  
     minangle=1.30899693
     maxangle=1.569
     fiber_critical_angle=f.get_fiber_critical_angle(fiber_index[i], medium_refraction_index[i])
@@ -294,9 +272,7 @@ for i in [0]:  #主函数
     df=pd.DataFrame({'patchiness':p,'za':za,'E_edis_ratio':radio_e[i]})
     df.to_excel(writer)
     writer.close()
-
-
-
+    
 # ----------------------------------------------------------------------------
 # Get Result Excel for Delaunay (First)
 # ----------------------------------------------------------------------------
@@ -324,14 +300,12 @@ tri.set_mask(mask)
 refiner = UniformTriRefiner(tri)
 tri_refi, z_test_refi = refiner.refine_field(z, subdiv=subdiv_1)
 
-# 输出新的xy点阵
+# Output a new xy lattice
 p1=tri_refi.x
 za1=tri_refi.y
 
-m1=len(p1)  #patchiness和za的对数
+m1=len(p1)  
 print(m1)
-
-
 
 # ----------------------------------------------------------------------------
 # Get Result Excel for Delaunay (Second)
@@ -360,16 +334,18 @@ tri.set_mask(mask)
 refiner = UniformTriRefiner(tri)
 tri_refi, z_test_refi = refiner.refine_field(z, subdiv=subdiv_2)
 
-# 输出新的xy点阵
+# Output a new xy lattice
 p2=tri_refi.x
 za2=tri_refi.y
 
-m2=len(p2)  #patchiness和za的对数
+m2=len(p2)  
 print(m2)
 
 # ----------------------------------------------------------------------------
 # Get data
 # ----------------------------------------------------------------------------
+
+#Correct the Units
 za11=za1*1000000000
 za22=za2*1000000000
 tri1=Triangulation(p1, za11)
@@ -379,14 +355,11 @@ print(za1)
 
 
 
-
-
 # ----------------------------------------------------------------------------
 # Calculation(First)(Second)
 # ----------------------------------------------------------------------------
 
-for i in range(number):  #主函数
-
+for i in range(number):  
     minangle=1.30899693
     maxangle=1.569
     fiber_critical_angle=f.get_fiber_critical_angle(fiber_index[i], medium_refraction_index[i])
@@ -460,9 +433,10 @@ for i in range(number):  #主函数
     del disspated_radiao2
     
     cs=ax.tricontourf(tri2, z1, levels=levels,cmap='jet')
-
+    
     lambbbb=270+i*5
-    plt.title(fr"$\lambda$ = {lambbbb} nm", fontsize=10, fontproperties=font_properties)
+    plt.title(fr"$\lambda$ = {lambbbb} nm")
+    
     #set colorbar
     cbar=fig.colorbar(cs)
     colorbarticks=np.arange(0, 1.1, 0.1)
@@ -475,9 +449,7 @@ for i in range(number):  #主函数
     # Save z1
     # ----------------------------------------------------------------------------
     
-    #plt.savefig('/content/drive/MyDrive/software_TiO2/Excel/Simple_Result/z1.svg',format='svg')
-    #plt.savefig('/content/drive/MyDrive/software_TiO2/Excel/Simple_Result/z1.png')
-    plt.savefig(f'/content/drive/MyDrive/software_TiO2/Result/1.33water_fiber/Z1/{i+1}.svg',format='svg')
+    plt.savefig(f'{i+1}.svg',format='svg')
     
     # ----------------------------------------------------------------------------
     # Graph Ze
@@ -497,14 +469,14 @@ for i in range(number):  #主函数
     plt.yticks(fontsize=10, fontproperties=font_properties)
     plt.ylabel(r"$\mathit{Z}$$_{a}$ (nm)",fontsize=10, fontproperties=font_properties)
     
-    
     ze=radio_e2
     del radio_e2
     
     cs=ax.tricontourf(tri2, ze, levels=levels,cmap='jet')
     
     lambbbb=270+i*5
-    plt.title(fr"$\lambda$ = {lambbbb} nm", fontsize=10, fontproperties=font_properties)
+    plt.title(fr"$\lambda$ = {lambbbb} nm")
+    
     #set colorbar
     cbar=fig.colorbar(cs)
     colorbarticks=np.arange(0, 1.1, 0.1)
@@ -517,9 +489,7 @@ for i in range(number):  #主函数
     # Save ze
     # ----------------------------------------------------------------------------
     
-    #plt.savefig('/content/drive/MyDrive/software_TiO2/Excel/Simple_Result/ze.png')
-    #plt.savefig('/content/drive/MyDrive/software_TiO2/Excel/Simple_Result/ze.svg',format='svg')
-    plt.savefig(f'/content/drive/MyDrive/software_TiO2/Result/1.33water_fiber/Ze/{i+1}.svg',format='svg')
+    plt.savefig(f'{i+1}.svg',format='svg')
     
     # ----------------------------------------------------------------------------
     # Graph ZNF
@@ -544,8 +514,10 @@ for i in range(number):  #主函数
     del near_field_ratio2
     
     cs=ax.tricontourf(tri2, zNF, levels=levels,cmap='jet')
+    
     lambbbb=270+i*5
-    plt.title(fr"$\lambda$ = {lambbbb} nm", fontsize=10, fontproperties=font_properties)
+    plt.title(fr"$\lambda$ = {lambbbb} nm")
+
     #set colorbar
     cbar=fig.colorbar(cs)
     colorbarticks=np.arange(0, 1.1, 0.1)
@@ -558,6 +530,5 @@ for i in range(number):  #主函数
     # Save zNF
     # ----------------------------------------------------------------------------
 
-    plt.savefig(f'/content/drive/MyDrive/software_TiO2/Result/1.33water_fiber/ZNF/{i+1}.svg',format='svg')
-    #plt.savefig('/content/drive/MyDrive/software_TiO2/Excel/Simple_Result/znf.png')
-    #plt.savefig('/content/drive/MyDrive/software_TiO2/Excel/Simple_Result/znf.svg',format='svg')
+    plt.savefig(f'{i+1}.svg',format='svg')
+
